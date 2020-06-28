@@ -7,6 +7,7 @@ import {
 } from "vuex-module-decorators";
 
 import User from "@ctsy/api-sdk/dist/modules/User";
+
 import { SearchResult, SearchWhere } from "@ctsy/api-sdk/dist/lib";
 import hook, { HookWhen } from "@ctsy/hook";
 import { delay_cb, array_tree } from "castle-function";
@@ -131,12 +132,12 @@ export default class users extends VuexModule {
    * 用户注册
    * @param data
    */
-  async get_user_register(data: any) {
+  async get_user_register(data: User.Regist) {
     //注册
     if (!Regs.Name.test(data.Name)) {
       throw "不合法的姓名";
     }
-    if (!Regs.Nick.test(data.NickName)) {
+    if (!Regs.Nick.test(data.Nick)) {
       throw "不合法的昵称";
     }
     if (!Regs.Account.test(data.Account)) {
@@ -146,16 +147,19 @@ export default class users extends VuexModule {
       throw "密码格式错误";
     }
 
+    data.Sex || -1;
+    data.PUID || 1;
     return await User.AuthApi.regist(
       data.Name,
-      data.NickName,
+      data.Nick,
       data.Account,
       data.PWD,
       data.Sex || -1,
       data.PUID || 1,
       "",
       data.Contacts || [],
-      data.Avatar
+      data.Avatar,
+      data.Other
     );
   }
 }
